@@ -1,6 +1,20 @@
 // STAR MATCH - Starting Template
 
-import { useState } from "react";
+import { useState } from 'react';
+
+const DisplayStars = (props: any) => (
+  <>
+    {utils.range(1, props.starCount).map((starId) => (
+      <div key={starId} className="star" />
+    ))}
+  </>
+);
+
+const PlayNumber = (props: any) => (
+  <button className="number" onClick={() => console.log('Num', props.number)}>
+    {props.number}
+  </button>
+);
 
 const StarMatch = () => {
   const [stars, setStars] = useState(utils.random(1, 9));
@@ -11,14 +25,12 @@ const StarMatch = () => {
       </div>
       <div className="body">
         <div className="left">
-          {utils.range(1, stars).map(starId =>
-            <div key={starId} className="star" />
-          )}
+          <DisplayStars starCount={stars} />
         </div>
         <div className="right">
-          {utils.range(1, 9).map(number =>
-            <button key={number} className="number">{number}</button>
-          )}
+          {utils.range(1, 9).map((number) => (
+            <PlayNumber key={number} number={number} />
+          ))}
         </div>
       </div>
       <div className="timer">Time Remaining: 10</div>
@@ -40,10 +52,12 @@ const utils = {
   sum: (arr: any[]) => arr.reduce((acc: any, curr: any) => acc + curr, 0),
 
   // create an array of numbers between min and max (edges included)
-  range: (min: number, max: number) => Array.from({ length: max - min + 1 }, (_, i) => min + i),
+  range: (min: number, max: number) =>
+    Array.from({ length: max - min + 1 }, (_, i) => min + i),
 
   // pick a random number between min and max (edges included)
-  random: (min: number, max: number) => min + Math.floor(Math.random() * (max - min + 1)),
+  random: (min: number, max: number) =>
+    min + Math.floor(Math.random() * (max - min + 1)),
 
   // Given an array of numbers and a max...
   // Pick a random sum (< max) from the set of all available sums in arr
