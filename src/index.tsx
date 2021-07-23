@@ -2,11 +2,11 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import reportWebVitals from './reportWebVitals'
-import StarMatch from './App'
+import Game from './App'
 
 ReactDOM.render(
     <React.StrictMode>
-        <StarMatch />
+        <Game />
     </React.StrictMode>,
     document.getElementById('root')
 )
