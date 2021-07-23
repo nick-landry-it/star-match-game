@@ -14,7 +14,7 @@ const PlayNumber = (props: any) => (
     <button
         className="number"
         style={{ backgroundColor: colors[props.status] }}
-        onClick={() => console.log('Num', props.number)}
+        onClick={() => props.onClick(props.number, props.status)}
     >
         {props.number}
     </button>
@@ -22,8 +22,8 @@ const PlayNumber = (props: any) => (
 
 const StarMatch = () => {
     const [stars, setStars] = useState(utils.random(1, 9))
-    const [availableNums, setAvailableNums] = useState([1, 2, 3, 4, 5])
-    const [candidateNums, setCandidateNums] = useState([2, 3])
+    const [availableNums, setAvailableNums] = useState(utils.range(1, 9))
+    const [candidateNums, setCandidateNums] = useState<Array<number>>([])
 
     const candidatesAreWrong = utils.sum(candidateNums) > stars
 
@@ -35,6 +35,26 @@ const StarMatch = () => {
             return candidatesAreWrong ? 'wrong' : 'candidate'
         }
         return 'available'
+    }
+
+    const onNumberClick = (number: any, currentStatus: any) => {
+        if (currentStatus == 'used') {
+            return
+        }
+        const newCandidateNums =
+            currentStatus === 'available'
+                ? candidateNums.concat(number)
+                : candidateNums.filter((cn) => cn !== number)
+        if (utils.sum(newCandidateNums) !== stars) {
+            setCandidateNums(newCandidateNums)
+        } else {
+            const newAvailableNums = availableNums.filter(
+                (n) => !newCandidateNums.includes(n)
+            )
+            setStars(utils.randomSumIn(newAvailableNums, 9))
+            setAvailableNums(newAvailableNums)
+            setCandidateNums([])
+        }
     }
 
     return (
@@ -52,6 +72,7 @@ const StarMatch = () => {
                             key={number}
                             status={numberStatus(number)}
                             number={number}
+                            onClick={onNumberClick}
                         />
                     ))}
                 </div>
